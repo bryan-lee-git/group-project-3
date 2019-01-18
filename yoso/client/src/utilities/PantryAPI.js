@@ -37,10 +37,7 @@ export default {
       `inside update pantry item, here's the incoming data: id: ${id} and data: `,
       data
     );
-    return axios.put({
-      url: `/api/pantry/${id}`,
-      data: data
-    });
+    return axios.put(`/api/pantry/${id}`, data);
   },
   // Delete a specific Pantry item.
   deletePantryItem: function(id) {

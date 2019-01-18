@@ -85,7 +85,7 @@ module.exports = {
       req.body
     );
 
-    db.Pantry.update(req.body, { where: { id: req.params } })
+    db.Pantry.update(req.body, { where: { id: req.params.id } })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },

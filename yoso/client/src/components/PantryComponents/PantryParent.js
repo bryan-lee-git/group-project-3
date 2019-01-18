@@ -67,6 +67,7 @@ export default class PantryParent extends Component {
     e.preventDefault();
     console.log(`inside the handlePantryUpdate method`);
     const { id, name } = pantryInfo;
+
     let value = this.state.pantry
       .filter(item => item.id === id)
       .map(result => result[columnName]);
@@ -110,8 +111,10 @@ export default class PantryParent extends Component {
       data
     );
 
-    PantryAPI.updatePantryItem(id, data).then(response =>
+    PantryAPI.updatePantryItem(id, data).then(response => {
       console.log(response)
+      this.getPantry();
+      } 
     );
 
     this.handleModal(e);
