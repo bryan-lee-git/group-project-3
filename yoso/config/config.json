@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "port": 3306,
+    "port": 8889,
     "password": "root",
     "database": "yoso",
     "host": "127.0.0.1",
@@ -15,10 +15,11 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "xqi6udswanisieql",
+    "password": "ogz7j35qkb45khp6",
+    "database": "ndsk83s5k173pnda",
+    "host": "cig4l2op6r0fxymw.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
     "dialect": "mysql"
   }
 }

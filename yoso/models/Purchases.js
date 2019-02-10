@@ -2,30 +2,27 @@ module.exports = function(sequelize, DataTypes) {
   var Purchase = sequelize.define("Purchase", {
     unitSize: {
       type: DataTypes.FLOAT,
-      allowNull: true
+      allowNull: false
     },
-    sizeQuantity: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    weightMeasure: {
+    measurement: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: false
     },
     quantity: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: false
     },
     expiration: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.STRING,
       allowNull: true
     },
     unitPrice: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: true
     },
     location: {
       type: DataTypes.STRING,
+      allowNull: true,
       validate: {
         len: [1, 75]
       }
@@ -36,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     ordinal: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: false
     }
   });
 

@@ -6,7 +6,6 @@ import BottomSpacer from "../../components/BottomSpacer";
 const About = () => {
   return (
     <Container className="center-align">
-    <br/>
       <LogoRow />
       <Row>
         <Col className="animate-up" s={12} m={12} l={4}>

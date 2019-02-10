@@ -3,25 +3,22 @@ module.exports = function(sequelize, DataTypes) {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        len: [1, 30]
-      }
     },
     unitSize: {
       type: DataTypes.FLOAT,
-      allowNull: true
+      allowNull: false
     },
-    weightMeasure: {
+    measurement: {
       type: DataTypes.STRING,
-      allowNull: true
-    },
-    sizeQuantity: {
-      type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: false
     },
     quantity: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: false
+    },
+    notes: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     }
   });
   return ListItem;

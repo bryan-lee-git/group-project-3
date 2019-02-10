@@ -50,6 +50,6 @@ db.Users.hasMany(db.List);
 db.Pantry.belongsTo(db.Users);
 db.Pantry.hasMany(db.Purchases);
 db.List.hasMany(db.ListItems, { onDelete: "cascade", hooks: true });
-db.ListItems.belongsTo(db.Pantry);
+db.ListItems.belongsTo(db.List);
 
 module.exports = db;

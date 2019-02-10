@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Input } from "react-materialize";
+import { Row, Input, Button, Col } from "react-materialize";
 
 
 const RecipeSearch = (props) => {
@@ -7,11 +7,12 @@ const RecipeSearch = (props) => {
     return (
         <form>
             <Row>
-                <Input s={12} onChange={props.handleInputChange} label="Search Recipes" type="text" name="query" />
-                <br />
-                <button onClick={props.handleFormSubmit} className="btn btn-primary">
-                    Search
-                </button>
+                <Input s={12} l={9} onChange={props.handleInputChange} label="Search Recipes" type="text" name="query" />
+                <Col s={12} l={3}>
+                    <Button onClick={props.handleFormSubmit} className="btn-large btn btn-primary search-btn">
+                        Search
+                    </Button>
+                </Col>
             </Row>
         </form>
     )

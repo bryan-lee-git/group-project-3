@@ -1,18 +1,13 @@
 import React from 'react';
 import { Container, Row, Col, Button } from 'react-materialize';
 import { Link } from "react-router-dom";
+import LogoRow from "../../components/LogoRow"
 import BottomSpacer from "../../components/BottomSpacer";
 
 const Landing = () => {
     return (
         <Container className="center-align">
-            <Row>
-                <br/><br/>
-                <Col s={12} l={8} offset="l2">
-                    <img id="home-logo" alt="yoso logo" src="./img/Yoso-Logo-Large-Text-White-Tag-Shadow.svg"></img>            
-                </Col>
-            </Row>
-            <br/>
+            <LogoRow/>
             <Row>
                 <Col className="animate-up" s={6} l={4}>
                     <Link to="/about"><Button id="home-learn" className="home-btn z-depth-5 btn-large">YOSO?</Button></Link>

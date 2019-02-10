@@ -9,13 +9,13 @@ export default props => {
       <Col s={12}>
         {handleSwitch ? (
           <Link to={goto} onClick={e => handleSwitch(e, page)}>
-            <Button className="back-btn">
+            <Button className="back-btn btn-large">
               <Icon>arrow_back</Icon>
             </Button>
           </Link>
         ) : (
           <Link to={goto}>
-            <Button className="back-btn">
+            <Button className="back-btn btn-large">
               <Icon>arrow_back</Icon>
             </Button>
           </Link>

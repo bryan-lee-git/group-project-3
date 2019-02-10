@@ -7,25 +7,21 @@ import BottomSpacer from "../../components/BottomSpacer";
 class SignUp extends Component {
 
   state = {
-    redirect: false,
+    redirect: false
   }
 
   handleInputChange = e => {
     const { name, value } = e.target;
-    this.setState({
-        [name]: value
-    });
+    this.setState({[name]: value});
   };
 
   handleRedirect = () => {
-    this.setState({
-      redirect: true,
-    });
+    this.setState({redirect: true});
   }
 
   handleSignUp = e => {
     e.preventDefault();
-      this.props.signUp(this.state, this.handleRedirect)
+    this.props.signUp(this.state, this.handleRedirect)
   }
 
   render() {
@@ -38,12 +34,7 @@ class SignUp extends Component {
 
     return (
       <Container className="center-align">
-      <br/>
-        <Row>
-          <Col s={12}>
-            <PageHeader>NEW ACCOUNT</PageHeader>
-          </Col>
-        </Row>
+        <PageHeader>NEW ACCOUNT</PageHeader>
         <form>
           <Card id="signup-form" className="rounded animate-up z-depth-4">
             <Row>

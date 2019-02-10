@@ -3,9 +3,6 @@ import axios from "axios";
 export default {
   //Get all User Lists items.
   getLists: function(userId) {
-    console.log(
-      `from inside the getlists method of the list api the user id is ${userId}`
-    );
     return axios.post(`/api/list/findAll`, {
       userId
     });
@@ -20,6 +17,15 @@ export default {
       }
     });
   },
+  getYoso: function(userId) {
+    return axios({
+      method: `get`,
+      url: `/api/list/${userId}`,
+      data: {
+        UserId: userId
+      }
+    });
+  },
   // Create just a new User List.
   createList: function(userId, data) {
     return axios({
@@ -28,19 +34,6 @@ export default {
       data: {
         UserId: userId,
         name: data.name
-      }
-    });
-  },
-
-  // Create a new User List with items
-  createListWithItems: function(userId, data) {
-    return axios({
-      method: `post`,
-      url: `/api/list/items`,
-      data: {
-        UserId: userId,
-        name: data.name,
-        items: data.items // MUST be an array of items
       }
     });
   },

@@ -4,6 +4,7 @@ import PageHeader from "../../components/PageHeader";
 import { Container, Row, Col } from "react-materialize";
 import BackBtn from "../../components/BackBtn";
 import { UserContext } from "../../App";
+import BottomSpacer from "../../components/BottomSpacer";
 
 class Waste extends Component {
   render() {
@@ -13,14 +14,10 @@ class Waste extends Component {
           console.log(`inside waste, here's the context: `, userContext);
           return (
             <Container className="center-align">
-              <br />
-              <Row>
-                <Col s={6}>
-                  <PageHeader>WASTE LESS!</PageHeader>
-                </Col>
-              </Row>
+              <PageHeader>WASTE LESS!</PageHeader>
               <BackBtn goto="/home" />
               <WasteItem context={userContext} />
+              <BottomSpacer/>
             </Container>
           );
         }}

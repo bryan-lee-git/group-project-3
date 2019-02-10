@@ -3,7 +3,6 @@ const db = require("../models");
 // Defining methods for the Purchases Controller
 module.exports = {
   findAll: function(req, res) {
-    console.log(`\nInside findAll of purchases, here's req.body: `, req.body);
     db.Purchases.findAll({
       where: req.body,
       order: [["simDate", "DESC"]]
@@ -23,7 +22,10 @@ module.exports = {
     );
     db.Purchases.create(req.body)
       .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
+      .catch(err => {
+        res.json(err);
+        res.status(422).json(err)
+      });
   },
   update: function(req, res) {
     db.Purchases.findOneAndUpdate(

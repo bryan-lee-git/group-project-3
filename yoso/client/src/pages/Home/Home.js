@@ -77,6 +77,7 @@ class Home extends Component {
                   </Link>
                 </Col>
                 <Col s={6} m={4} l={2}>
+
                   <Button
                     id="home-logout"
                     onClick={() => {

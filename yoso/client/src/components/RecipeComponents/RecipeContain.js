@@ -1,25 +1,66 @@
 import React, { Component } from "react";
-import Recipe from "../../components/RecipeComponents/Recipe";
+import Recipe from "./Recipe";
 import { Container, Row, Card } from "react-materialize";
 import Yummly from "../../utilities/RecipeAPI";
-import RecipeSearch from "../../components/RecipeComponents/RecipeSearch";
-import BackBtn from "../../components/BackBtn";
-import BottomSpacer from "../../components/BottomSpacer";
-import PageHeader from "../../components/PageHeader";
+import RecipeSearch from "./RecipeSearch";
+import BackBtn from "../BackBtn";
+import BottomSpacer from "../BottomSpacer";
+import PageHeader from "../PageHeader";
+import ListAPI from "../../utilities/ListAPI";
+import ItemAPI from "../../utilities/ItemAPI";
 
 class RecipeContain extends Component {
 
   state = {
     query: "",
     response: "",
-    errMsg: "Search for a recipe!"
+    errMsg: "Search for a recipe!",
+    lists: [],
+    selectedListId: "",
+    selectedRecipeIngredients: []
   };
+
+  componentDidMount() {
+    this.getLists(this.props.user.id);
+  }
+
+  getLists = id => {
+    ListAPI.getLists(id).then(res => {
+      this.setState({ lists: res.data });
+    });
+  };
+
+
+
+  setIngredientsToState = (listId, recipeIndex) => {
+
+    var recipeObj = this.state.response.filter((recipe, index) => {
+      return index === recipeIndex;
+    })[0]
+    this.setState({
+      selectedListId: listId,
+      selectedRecipeIngredients: recipeObj.ingredients
+    })
+  }
+
+  addIngredientsToList = () => {
+    const listId = this.state.selectedListId;
+    this.state.selectedRecipeIngredients.forEach((ingredient) => {
+      ItemAPI.createItem({
+        name: ingredient,
+        unitSize: 1,
+        measurement: "N/A",
+        quantity: 1,
+        notes: "",
+        listId: listId 
+      })
+    })
+  }
 
   findRecipes = () => {
     Yummly.getRecipes(this.state.query)
       .then(res => {
         this.setState({ response: res.data.matches });
-        console.log(this.state.response);
       })
       .catch(err => {
         if (err) {
@@ -33,7 +74,6 @@ class RecipeContain extends Component {
     this.setState({
       [name]: value
     });
-    console.log(this.state);
   };
 
   handleFormSubmit = e => {
@@ -57,10 +97,14 @@ class RecipeContain extends Component {
             {this.state.response.map((recipe, index) => (
               <Recipe
                 key={index}
+                recipeIndex={index}
                 title={recipe.recipeName}
                 ingredients={recipe.ingredients}
                 img={recipe.smallImageUrls[0]}
                 link={`https://www.yummly.com/recipe/${recipe.id}`}
+                lists={this.state.lists}
+                setIngredientsToState={this.setIngredientsToState}
+                addIngredientsToList={this.addIngredientsToList}
               />
             ))}
           </Row>

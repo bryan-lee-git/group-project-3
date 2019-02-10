@@ -25,9 +25,10 @@ export default {
       data: {
         name: data.name,
         unitSize: data.unitSize,
+        measurement: data.measurement,
         quantity: data.quantity,
-        ListId: data.ListId,
-        PantryId: data.PantryId
+        notes: data.notes,
+        ListId: data.listId
       }
     });
   },
@@ -36,17 +37,11 @@ export default {
     return axios({
       method: `put`,
       url: `/api/listitem/${id}`,
-      data: {
-        listId: listId,
-        data
-      }
+      data: data
     });
   },
   // Delete a specific item on a list.
   deleteItem: function(listId, id) {
-    console.log(
-      `inside deleteitem method of listitem, here's the incoming arguments: listId: ${listId}; id: ${id}`
-    );
     return axios({
       method: `delete`,
       url: `/api/listitem/${id}`,

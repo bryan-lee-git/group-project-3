@@ -3,10 +3,6 @@ const db = require("../models");
 // Defining methods for the ListController
 module.exports = {
   findAll: function(req, res) {
-    console.log(
-      `inside the list findall method of the list controller, here is the req.body: `,
-      req.body
-    );
     db.List.findAll({
       where: { UserId: req.body.userId }
     })
@@ -22,6 +18,16 @@ module.exports = {
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
+  findYosoList: function(req, res) {
+    db.List.findAll({
+      where: {
+        UserId: req.params.id,
+        name: "YOSO List"
+      }
+    })
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
   create: function(req, res) {
     db.List.create({
       UserId: req.body.UserId,
@@ -32,7 +38,6 @@ module.exports = {
   },
 
   createListWithItems: function(req, res) {
-    console.log(`here's the items to save: `, req.body.items);
     db.List.create(
       {
         UserId: req.body.UserId,
@@ -58,11 +63,6 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
   destroy: function(req, res) {
-    console.log(
-      `inside listcontroller, remove method, here's the req.params: and req.body: `,
-      req.params,
-      req.body
-    );
     db.List.destroy({
       where: {
         UserId: req.body.userId,

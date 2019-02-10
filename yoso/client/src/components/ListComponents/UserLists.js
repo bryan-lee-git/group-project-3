@@ -13,6 +13,7 @@ import ItemAPI from "../../utilities/ItemAPI";
 import BackBtn from "../BackBtn";
 
 export default class UserLists extends Component {
+
   state = {};
 
   handleDeleteList = (e, userId, listId, cb) => {
@@ -20,18 +21,14 @@ export default class UserLists extends Component {
     ListAPI.deleteList(userId, listId).then(() => cb(userId));
   };
 
-  handleDeleteItem = (e, userId, listId, itemId, cb) => {
+  handleDeleteItem = (e, listId, itemId, cb) => {
     e.preventDefault();
-    ItemAPI.deleteItem(listId, itemId).then(() => cb(userId));
+    ItemAPI.deleteItem(listId, itemId).then(() => cb());
   };
 
-  getItems = id => {
-    ItemAPI.getItems(id).then(res => {
-      this.setState({
-        items: res.data
-      });
-    });
-  };
+  componentWillMount = () => {
+    this.props.getLists(this.props.user.id);
+  }
 
   render() {
     const lists = this.props.context.lists.map((list, index) => (
@@ -40,15 +37,25 @@ export default class UserLists extends Component {
           <ShowItems
             key={list.id}
             listId={list.id}
+            user={this.props.user}
             name={list.name}
             currentList={list.lists}
-            getItems={this.getItems}
-            onClick={e =>
-              this.handleDeleteItem(e, this.props.context.id, list.id, this.key)
-            }
+            handleEditItem={this.handleEditItem}
+            handleDeleteItem={this.handleDeleteItem}
           />
           <Row>
-            <Col s={5}>
+            <Col s={12} l={4}>
+              <Button
+                onClick={() => this.props.setShoppingList(list.id, 3)}
+                className="list-btn"
+              >SHOP</Button>
+            </Col>
+            <Col s={12} l={4}>
+              <Button
+                className="list-btn"
+              >SHARE</Button>
+            </Col>
+            <Col s={12} l={4}>
               <Button
                 className="list-btn"
                 onClick={e =>
@@ -60,12 +67,6 @@ export default class UserLists extends Component {
                   )
                 }
               >DELETE</Button>
-            </Col>
-            <Col s={5} offset="s2" className="right">
-              <Button
-                onClick={() => this.props.setShoppingList(list.id, 3)}
-                className="list-btn"
-              >SHOP</Button>
             </Col>
           </Row>
         </CollapsibleItem>

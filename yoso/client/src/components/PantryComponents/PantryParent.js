@@ -9,11 +9,10 @@ import {
   Card
 } from "react-materialize";
 import BackBtn from "../BackBtn";
-
-import LogoRow from "../LogoRow";
+import BottomSpacer from "../BottomSpacer"
+import PageHeader from "../PageHeader";
 import PantryAPI from "../../utilities/PantryAPI";
 import PurchasesAPI from "../../utilities/PurchasesAPI";
-
 import Moment from "react-moment";
 import moment from "moment";
 import PantryTable from "./PantryTable";
@@ -123,18 +122,8 @@ export default class PantryParent extends Component {
     // console.log(`inside pantry parent render, here's props: `, this.props);
     return (
       <Container className="center-align">
-        <LogoRow />
-        <Row>
-          <Col s={12}>
-            <h1 className="white-text fade-in">IN THE PANTRY</h1>
-          </Col>
-        </Row>
+        <PageHeader>IN THE PANTRY</PageHeader>
         <BackBtn goto="home" />
-        <Row>
-          <Card className="rounded z-depth-5">
-            <h3>Pantry Items</h3>
-          </Card>
-        </Row>
         <PantryTable
           pantry={this.state.pantry}
           handleDelete={this.handleDelete}
@@ -184,6 +173,7 @@ export default class PantryParent extends Component {
             Save
           </Button>
         </Modal>
+        <BottomSpacer/>
       </Container>
     );
   }

@@ -41,13 +41,7 @@ class SignIn extends Component {
     return (
       <Container className="center-align">
         <Container>
-          <br />
-          <Row>
-            <Col s={12}>
-              <PageHeader>SIGN IN</PageHeader>
-            </Col>
-          </Row>
-
+          <PageHeader>SIGN IN</PageHeader>
           <form>
             <Container>
               <Card id="signin-form" className="rounded animate-up z-depth-4">

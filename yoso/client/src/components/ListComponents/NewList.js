@@ -16,11 +16,12 @@ import { terms } from "../../utilities/ItemTerms";
 import BackBtn from "../BackBtn";
 import PageHeader from "../PageHeader";
 
+const measurements = ["Pack", "Ounce(s)", "Pound(s)", "Feet", "Liter(s)", "Can(s)", "Bottle(s)", "Package(s)", "Carton(s)", "Loaf(s)", "Box(es)", "Bunch(es)", "Gallon(s)", "Quart(s)", "Pint(s)", "Case(s)", "Dozen", "Bag(s)", "Single(s)", "Jar(s)", "Piece(s)", "Container(s)", "Unit(s)"];
+
 export default class NewList extends Component {
   state = { items: [], terms: terms, redirect: false };
 
   handleChange = e => {
-    e.preventDefault();
     const { name, value } = e.target;
     if (value) {
       const capName = value.replace(
@@ -41,18 +42,19 @@ export default class NewList extends Component {
 
   handleNewItem = e => {
     e.preventDefault();
-
     const newItem = {
       name: this.state.name,
       unitSize: this.state.unitSize,
-      quantity: this.state.quantity
+      measurement: this.state.measurement,
+      quantity: this.state.quantity,
+      notes: this.state.notes
     };
     const newItems = [...this.state.items, newItem];
     this.setState({ items: newItems });
   };
 
-  handleRemoveItem = event => {
-    const index = event.target.dataset.index;
+  handleRemoveItem = e => {
+    const index = e.target.dataset.index;
     const newItems = this.state.items;
     newItems.splice(index, 1);
     this.setState({ items: newItems });
@@ -64,25 +66,21 @@ export default class NewList extends Component {
       name: this.state.listName
     }).then(response => {
       this.state.items.forEach(item => {
-        item.ListId = response.data.id;
-        this.setState({
+        ItemAPI.createItem({
+          name: item.name,
+          unitSize: item.unitSize,
+          measurement: item.measurement,
+          quantity: item.quantity,
+          notes: item.notes,
           listId: response.data.id
+        }).then(() => {
+          this.props.handleSwitch(e, 2);
         });
-        ItemAPI.createItem(item)
       });
-
-      this.props.handleSwitch(e, 2);
     });
   };
 
-  handleRedirect = () => {
-    this.setState({ redirect: true });
-  };
-
   render() {
-    if (this.state.redirect) {
-      return <Redirect to={`/lists`} />;
-    }
     return (
       <div className="center-align">
         <Row>
@@ -94,50 +92,65 @@ export default class NewList extends Component {
         </Row>
         <BackBtn goto="/lists" handleSwitch={this.props.handleSwitch} page={0}/>
         <Row>
-          <Col s={12} l={4}>
+          <Col s={12} l={2}>
             <Card className="z-depth-5 animate-up list-card rounded">
               <Row>
                 <Input
                   s={12}
-                  placeholder="Enter list name here"
+                  placeholder="List Name"
                   name="listName"
                   onChange={this.handleChange}
                 />
               </Row>
             </Card>
           </Col>
-          <Col s={12} l={8}>
+          <Col s={12} l={10}>
             <Card
               id="new-item-input"
               className="z-depth-5 animate-up-2 list-card rounded"
             >
               <Row>
                 <Autocomplete
-                  s={4}
-                  l={3}
+                  s={12}
+                  l={2}
                   data={this.state.terms}
                   placeholder="Name"
-                  onAutocomplete={
-                    this.handleAutocomplete //label="New Item"
-                  }
+                  onAutocomplete={this.handleAutocomplete}
                   name="name"
                   onChange={this.handleChange}
                 />
                 <Input
-                  s={4}
-                  l={3}
+                  s={6}
+                  l={2}
                   placeholder="Unit Size"
                   name="unitSize"
                   onChange={this.handleChange}
                 />
                 <Input
-                  s={4}
-                  l={3}
+                  s={6}
+                  l={2}
+                  type="select"
+                  defaultValue="pack"
+                  name="measurement"
+                  onChange={this.handleChange}
+                >
+                  { measurements.map((measurement, index) => (<option key={index} value={measurement}>{measurement}</option>)) }               
+                </Input>
+                <Input
+                  s={6}
+                  l={2}
                   placeholder="Quantity"
                   name="quantity"
                   onChange={this.handleChange}
                 />
-                <Col s={12} l={3}>
+                <Input
+                  s={6}
+                  l={2}
+                  placeholder="Notes"
+                  name="notes"
+                  onChange={this.handleChange}
+                />
+                <Col s={12} l={2}>
                   <Button
                     className="btn btn-large add-item-btn"
                     onClick={this.handleNewItem}
@@ -153,13 +166,15 @@ export default class NewList extends Component {
               <Row>
                 <h2>{this.state.items.name}</h2>
                 {this.state.items.length > 0 ? (
-                  <Table className="striped highlight centered">
+                  <Table className="striped highlight centered responsive-table">
                     <thead>
                       <tr>
                         <th>Name</th>
-                        <th>Size</th>
+                        <th>Unit Size</th>
+                        <th>Measurement</th>
                         <th>Quantity</th>
-                        <th>Remove Item</th>
+                        <th>Notes</th>
+                        <th>Remove</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -167,8 +182,10 @@ export default class NewList extends Component {
                         <tr key={index}>
                           <td>{item.name}</td>
                           <td>{item.unitSize}</td>
+                          <td>{item.measurement}</td>
                           <td>{item.quantity}</td>
-                          <td onClick={this.state.handleRemoveItem}>
+                          <td>{item.notes}</td>
+                          <td onClick={event => this.handleRemoveItem(event)}>
                             <Icon data-index={index}>delete_forever</Icon>
                           </td>
                         </tr>

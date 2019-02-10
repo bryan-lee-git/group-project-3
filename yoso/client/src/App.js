@@ -12,16 +12,17 @@ import SignUp from "./pages/SignUp";
 import Home from "./pages/Home";
 import Lists from "./pages/Lists";
 import Pantry from "./pages/Pantry";
-import RecipeContain from "./pages/RecipeContain";
+import RecipePage from "./pages/RecipePage";
 import Waste from "./pages/Waste";
 import About from "./pages/About";
 import Account from "./pages/Account";
+import Tech from "./pages/Tech";
+import TandC from "./pages/TandC";
 import axios from "axios";
 import "./Yoso.css";
 export const UserContext = React.createContext({});
 
-const bcrypt = require("bcryptjs");
-const salt = bcrypt.genSaltSync(10);
+const CryptoJS = require("crypto-js");
 
 const yosoAuth = {
   isAuthenticated: false,
@@ -50,13 +51,13 @@ class App extends Component {
 
   handleSignUp = (data, cb) => {
     const { first, last, email, password, street, city, state, zip } = data;
-    const hash = bcrypt.hashSync(password, salt);
+    const ciphertext = CryptoJS.AES.encrypt(password, 'yosoAuthKeyMofo').toString();
     axios
       .post("/login", {
         first,
         last,
         email,
-        password: hash,
+        password: ciphertext,
         street,
         city,
         state,
@@ -69,7 +70,7 @@ class App extends Component {
             first,
             last,
             email,
-            password: hash,
+            password: ciphertext,
             street,
             city,
             state,
@@ -92,13 +93,10 @@ class App extends Component {
       .get("/login", { email })
       .then(response => {
         if (response.data) {
-          console.log(
-            `here's the response from the db for the user data: `,
-            response.data
-          );
           const hash = response.data.password;
-          bcrypt.compare(password, hash).then(res => {
-            if (res === true) {
+          var bytes = CryptoJS.AES.decrypt(hash, 'yosoAuthKeyMofo');
+          var originalText = bytes.toString(CryptoJS.enc.Utf8);
+          if (originalText === password) {
               yosoAuth.authenticate();
               this.setState({
                 first: response.data.first,
@@ -112,10 +110,8 @@ class App extends Component {
                 id: response.data.id,
                 loggedIn: true
               });
-
               if (cb) cb();
             } else console.log("Incorrect Log-In Attempt. Please Try Again.");
-          });
         } else console.log("Could not sign in! Please try again.");
       })
       .catch(err => {
@@ -126,13 +122,13 @@ class App extends Component {
 
   handleAccountUpdate = (data, cb) => {
     const { first, last, email, password, street, city, state, zip } = data;
-    const hash = bcrypt.hashSync(password, salt);
+    const ciphertext = CryptoJS.AES.encrypt(password, 'yosoAuthKeyMofo').toString();
     axios
       .put(`/login/${email}`, {
         first,
         last,
         email,
-        password: hash,
+        password: ciphertext,
         street,
         city,
         state,
@@ -145,14 +141,13 @@ class App extends Component {
             first,
             last,
             email,
-            password: hash,
+            password: ciphertext,
             street,
             city,
             state,
             zip,
             loggedIn: true
           });
-
           if (cb) cb();
         } else console.log("Could not sign up! Please try again.");
       })
@@ -179,66 +174,63 @@ class App extends Component {
             logOut: this.handleLogOut
           }}
         >
-          <div>
-            <header>
-              <Nav
-                className="main-nav"
-                loggedIn={this.state.loggedIn}
-                logOut={this.handleLogOut}
-              />
-            </header>
-            <main>
-              <Route exact path="/" component={Landing} />
-              <Route
-                exact
-                path="/signin"
-                render={() => {
-                  return (
-                    <SignIn signUpPath="/signup" signIn={this.handleSignIn} />
-                  );
-                }}
-              />
-              <Route
-                exact
-                path="/signup"
-                render={() => {
-                  return <SignUp signUp={this.handleSignUp} />;
-                }}
-              />
-              <Route exact path="/about" component={About} />
-              <PrivateRoute exact path="/home" component={Home} />
-              <PrivateRoute exact path="/lists" component={Lists} />
-              <PrivateRoute exact path="/pantry" component={Pantry} />
-              <PrivateRoute exact path="/recipes" component={RecipeContain} />
-              <PrivateRoute exact path="/waste" component={Waste} />
-              <PrivateRoute exact path="/account" component={Account} />
-            </main>
-            <footer className="page-footer">
-              <div className="container" />
-              <div className="footer-copyright">
-                <div className="container hide-on-med-and-down">
-                  <span>COPYRIGHT 2018 © PANDA WARRIORS DG</span>
-                  <span className="right">
-                    <Link className="footer-link" to="/about">
-                      ABOUT
-                    </Link>{" "}
-                    |{" "}
-                    <Link className="footer-link" to="/tech">
-                      TECH
-                    </Link>{" "}
-                    |{" "}
-                    <Link className="footer-link" to="/contact">
-                      CONTACT
-                    </Link>{" "}
-                    |{" "}
-                    <Link className="footer-link" to="/tandc">
-                      TERMS AND CONDITIONS
-                    </Link>
-                  </span>
-                </div>
+          <header>
+            <Nav
+              className="main-nav"
+              loggedIn={this.state.loggedIn}
+              logOut={this.handleLogOut}
+            />
+          </header>
+          <main>
+            <Route exact path="/" component={Landing} />
+            <Route exact path="/tech" component={Tech} />
+            <Route exact path="/tandc" component={TandC} />
+            <Route exact path="/about" component={About} />
+            <Route
+              exact
+              path="/signin"
+              render={() => {
+                return (
+                  <SignIn signUpPath="/signup" signIn={this.handleSignIn} />
+                );
+              }}
+            />
+            <Route
+              exact
+              path="/signup"
+              render={() => {
+                return <SignUp signUp={this.handleSignUp} />;
+              }}
+            />
+            {/* Logged-In Routes */}
+            <PrivateRoute exact path="/home" component={Home} />
+            <PrivateRoute exact path="/lists" component={Lists} />
+            <PrivateRoute exact path="/pantry" component={Pantry} />
+            <PrivateRoute exact path="/recipes" component={RecipePage} />
+            <PrivateRoute exact path="/waste" component={Waste} />
+            <PrivateRoute exact path="/account" component={Account} />
+          </main>
+          <footer className="page-footer">
+            <div className="container" />
+            <div className="footer-copyright">
+              <div className="container hide-on-med-and-down">
+                <span>COPYRIGHT 2018 © PANDA WARRIORS DG</span>
+                <span className="right">
+                  <Link className="footer-link" to="/about">
+                    ABOUT
+                  </Link>{" "}
+                  |{" "}
+                  <Link className="footer-link" to="/tech">
+                    TECH
+                  </Link>{" "}
+                  |{" "}
+                  <Link className="footer-link" to="/tandc">
+                    TERMS AND CONDITIONS
+                  </Link>
+                </span>
               </div>
-            </footer>
-          </div>
+            </div>
+          </footer>
         </UserContext.Provider>
       </Router>
     );
