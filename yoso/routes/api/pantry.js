@@ -18,6 +18,7 @@ router.route("/name").post(PantryController.findOne);
 // Matches with "/api/pantry/:id"
 router
   .route("/:id")
+  .get(PantryController.findOneById)
   .post(PantryController.findOrCreate)
   .put(PantryController.update)
   .delete(PantryController.remove);

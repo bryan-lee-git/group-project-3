@@ -1,32 +1,20 @@
-import DailyUpdate from "./DailyUpdate";
 import random from "./Random";
 import PurchasesAPI from "../PurchasesAPI";
+import PantryAPI from "../PantryAPI";
+import moment from "moment";
 
-export default function goShopping(PantryId, time) {
+export default async function goShopping(pantry, time, userMemory) {
+  console.log(
+    `Made it inside GoShopping. Here's time: ${moment(time).format(
+      "MMM DD, YYYY"
+    )} userMemory: ${userMemory} and pantry: `,
+    pantry
+  );
   //time = the simulated shopping date.
-
-  const Memory = [
-    1, // perfect
-    0.95, //excellent
-    0.9, // great
-    0.85, // good
-    0.8, // average
-    0.75, // challenged
-    0.7 // bad
-  ];
-
-  const { waste, YOSO } = DailyUpdate(PantryId);
 
   const userList = [];
 
-  const userMemory = random(Memory.length);
-
-  function getAverage(num) {
-    let total = total + num;
-    let items = items + 1;
-    return total / items;
-  }
-
+  const YOSO = pantry.filter(item => item.stock !== "ENOUGH");
   //Step 1: Write the user's shopping list
 
   // Part One: Determine False Negatives
@@ -50,25 +38,27 @@ export default function goShopping(PantryId, time) {
   });
 
   // Step 2: Make purchases off of userList.
+  console.log(`userList is: `, userList);
 
-  userList.forEach(item => {
+  const list = userList.map(async item => {
+    console.log(
+      `Inside goShopping, here's the item.id before making the data to go to the db: ${
+        item.id
+      }`
+    );
     const data = {
-      createdAt: time,
-      quantity: random(4),
+      simDate: time,
+      quantity: random(4) + 1,
       expiration: moment(time).add(random(item.shelfLife), "days"),
       PantryId: item.id
     };
-    PurchasesAPI.createPurchase(data).then(response => console.log(response));
+    await PurchasesAPI.createPurchase(data).then(response => {
+      const data = { stock: "ENOUGH" };
+      const result = PantryAPI.updatePantryItem(response.data.id, data);
+      console.log(result);
+    });
   });
+  const results = await Promise.all(list);
 
-  // Step 3: Update Pantry frequency. New frequency = average time between purchases.
-
-  userList.forEach(item => {
-    PurchasesAPI.getPurchases(PantryId).then(
-      response =>
-        (item.frequency = response.data.reduce(item =>
-          getAverage(item.createdAt)
-        ))
-    );
-  });
+  console.log(results);
 }

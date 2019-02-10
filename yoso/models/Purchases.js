@@ -27,6 +27,10 @@ module.exports = function(sequelize, DataTypes) {
         len: [1, 75]
       }
     },
+    simDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+    },
     ordinal: {
       type: DataTypes.INTEGER,
       allowNull: false

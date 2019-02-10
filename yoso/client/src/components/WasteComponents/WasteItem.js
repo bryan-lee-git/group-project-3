@@ -8,6 +8,9 @@ import { categories } from "../../utilities/ItemTerms";
 import PantryAPI from "../../utilities/PantryAPI";
 import random from "../../utilities/YOSOSimulator.js/Random";
 import WasteTable from "./WasteTable";
+import DailyUpdate from "../../utilities/YOSOSimulator.js/DailyUpdateSim";
+import moment from "moment";
+import GoShopping from "../../utilities/YOSOSimulator.js/GoShopping";
 
 //import "moment-timezone";
 
@@ -17,61 +20,19 @@ class WasteItem extends Component {
     build: false,
     sort: "frequency",
     pantry: [],
-    purchases: [
-      {
-        id: 1,
-        createdAt: 0,
-        quantity: 3,
-        unitSize: "dozen",
-        weightMeasure: "ounces",
-        sizeQuantity: 24,
-        expiration: 0,
-        unitPrice: 1.49,
-        location: "Smiths",
-        pantryId: 1
-      }
-    ]
+    purchases: [],
+    isSimming: false
   };
+
   componentDidMount() {
     this.setState({ UserId: this.props.context.user.id });
-    this.buildPantry();
+    this.getPantry();
   }
+
   launchBuildPantry = e => {
     e.preventDefault();
     this.setState({
       build: true
-    });
-  };
-  buildPantry = () => {
-    let chosen = [];
-
-    PantryAPI.getPantry(this.state.UserId, "frequency").then(response => {
-      console.log(`response for build pantry in wastItem is `, response);
-      if (response.data.length > 0) {
-        this.setState({
-          pantry: response.data
-        });
-      } else {
-        categories.forEach((category, index) => {
-          for (let i = 0; i < category.length; i++) {
-            const target = random(category.length);
-            if (chosen.includes(target)) {
-              console.log(`already got it`);
-            } else {
-              chosen.push(target);
-              PantryAPI.findOrCreatePantryItem(
-                BuildPantry(category, index, target, this.state.UserId)
-              ).then(response =>
-                PantryAPI.getPantry(this.state.UserId).then(response =>
-                  this.setState({
-                    pantry: response.data
-                  })
-                )
-              );
-            }
-          }
-        });
-      }
     });
   };
 
@@ -86,11 +47,13 @@ class WasteItem extends Component {
       [name]: value
     });
   };
+
   handleChange = e => {
     this.setState({
       updateValue: e.target.value
     });
   };
+
   handleSubmit = (e, id) => {
     e.preventDefault();
     let value = this.state.updateValue;
@@ -112,12 +75,14 @@ class WasteItem extends Component {
 
     this.handleModal(e);
   };
+
   handleModal = e => {
     e.preventDefault();
     this.setState({
       update: !this.state.update
     });
   };
+
   getPantry = () => {
     const { id } = this.props.context.user;
     const sort = this.state.sort;
@@ -131,6 +96,7 @@ class WasteItem extends Component {
       })
     );
   };
+
   handleDelete = (e, id, cb) => {
     e.preventDefault();
     console.log(
@@ -140,6 +106,7 @@ class WasteItem extends Component {
 
     PantryAPI.deletePantryItem(id).then(response => cb());
   };
+
   handlePantryUpdate = (e, columnName, pantryInfo) => {
     e.preventDefault();
     console.log(`inside the handlePantryUpdate method`);
@@ -158,47 +125,26 @@ class WasteItem extends Component {
   };
 
   render() {
-    const date = new Date();
     const { user } = this.props.context;
-    console.log(`inside wasteitem, here's the context: `, user);
+
     return (
       <React.Fragment>
         <Row>
-          <Col s={4} offset="3">
-            <Card className="z-depth-3 rounded">
-              <h4>{user.first.toUpperCase()}'S WASTE</h4>
-            </Card>
-            <Card className="z-depth-3 rounded">
-              <h5>ITEMS</h5>
-            </Card>
-          </Col>
-          <Col s={8}>
-            <Card className="z-depth-3 rounded">
-              <h4>WASTE SIMULATOR</h4>
-              <h5>
-                <Moment format="MM-DD-YYYY">{date}</Moment>
-                <br />
-                <Moment format="MM-DD-YYYY" subtract={{ days: 365 }}>
-                  {date}
-                </Moment>
-              </h5>
-            </Card>
-            {this.state.build ? (
-              <WasteTable
-                pantry={this.state.pantry}
-                purchases={this.state.purchases}
-                handleDelete={this.handleDelete}
-                handlePantryUpdate={this.handlePantryUpdate}
-                buildPantry={this.buildPantry}
-                getPantry={this.getPantry}
-              />
-            ) : (
-              <Button className="btn build-pantry-btn" onClick={this.launchBuildPantry}>
-                BUILD YOUR PANTRY
-              </Button>
-            )}
+          <h3 className="white-text fade-in">
+            {user.first.toUpperCase()}'S PANTRY
+          </h3>
+          <Col s={12}>
+            <WasteTable
+              pantry={this.state.pantry}
+              purchases={this.state.purchases}
+              handleDelete={this.handleDelete}
+              handlePantryUpdate={this.handlePantryUpdate}
+              buildPantry={this.buildPantry}
+              getPantry={this.getPantry}
+            />
           </Col>
         </Row>
+
         <Modal
           id="pop-up-input"
           header={`Update ${this.state.label} for ${

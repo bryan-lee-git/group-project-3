@@ -88,7 +88,7 @@ export default props => {
         }}
         SubComponent={row => (
           <ReactTable
-            data={props.purchases}
+            data={props.purchases.data}
             columns={purchaseHeadings}
             defaultPageSize={props.purchases.length}
             showPagination={false}
