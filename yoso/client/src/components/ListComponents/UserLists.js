@@ -7,6 +7,9 @@ import {
   Row,
   CollapsibleItem,
   Button,
+  Modal,
+  Icon,
+  Input
 } from "react-materialize";
 import ListAPI from "../../utilities/ListAPI";
 import ItemAPI from "../../utilities/ItemAPI";
@@ -14,7 +17,9 @@ import BackBtn from "../BackBtn";
 
 export default class UserLists extends Component {
 
-  state = {};
+  state = {
+    formattedLists: []
+  };
 
   handleDeleteList = (e, userId, listId, cb) => {
     e.preventDefault();
@@ -26,7 +31,27 @@ export default class UserLists extends Component {
     ItemAPI.deleteItem(listId, itemId).then(() => cb());
   };
 
+  copyList = index => {
+    const copyText = document.getElementById(index);
+    console.log(copyText);
+    copyText.select();
+    document.execCommand("copy");
+  }
+
+  formatLists = () => {
+    this.props.context.lists.forEach(list => {
+      ItemAPI.getItems(list.id).then(res => {
+        let formattedList = ``;
+        res.data.forEach(item => {
+          formattedList += `${item.name}. Unit Size: ${item.unitSize} ${item.measurement}. How Many: ${item.quantity}. Notes: ${item.notes}.%0A`
+        })
+        this.setState({formattedLists: [...this.state.formattedLists, formattedList]});
+      });
+    })
+  }
+
   componentWillMount = () => {
+    this.formatLists();
     this.props.getLists(this.props.user.id);
   }
 
@@ -51,9 +76,30 @@ export default class UserLists extends Component {
               >SHOP</Button>
             </Col>
             <Col s={12} l={4}>
-              <Button
-                className="list-btn"
-              >SHARE</Button>
+              <Modal
+                className="center-align"
+                header='List Sharing Options'
+                trigger={<Button className="list-btn">SHARE</Button>}>
+                <br/>
+                <Row>
+                  <Col s={12} l={6}>
+                    <a href={"sms:&body=" + this.state.formattedLists[index]}>
+                      <Button className="share-btn">
+                        Text This List <br/>
+                        <Icon large>textsms</Icon>
+                      </Button>
+                    </a>
+                  </Col>
+                  <Col s={12} l={6}>
+                    <a href={"mailto:?subject=Here's The List!&body=" + this.state.formattedLists[index]}>
+                      <Button className="share-btn">
+                        Email This List <br/>
+                        <Icon large>email</Icon>
+                    </Button>
+                    </a>
+                  </Col>
+                </Row>
+              </Modal>
             </Col>
             <Col s={12} l={4}>
               <Button

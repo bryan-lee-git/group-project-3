@@ -29,6 +29,35 @@ h4 {
   text-transform: uppercase;
 }
 
+input[type="color"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"],
+select:focus,
+textarea {
+  font-size: 16px;
+}  
+
+.invisible {
+  display: none;
+}
+
+.share-btn {
+  width: 100%;
+  height: 100px;
+  margin-bottom:10px;
+}
+
 .strikethrough {
   text-decoration: line-through;
   opacity: 0.2;
@@ -45,10 +74,28 @@ h4 {
 
 .list-btn {
   width: 100%;
+  margin-bottom: 10px;
 }
 
 #main-nav {
   background-color: #007f09;
+}
+
+.picker__box {
+  border-radius: 10px;
+}
+
+.picker__date-display {
+  background-color: #007f09;
+}
+
+.picker__weekday-display {
+  color: #00BF0D;
+  background-color: white;
+}
+
+.picker__close, .picker__today {
+  color: #007f09;
 }
 
 h1,
