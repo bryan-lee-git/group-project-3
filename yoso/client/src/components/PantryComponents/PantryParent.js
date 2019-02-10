@@ -21,31 +21,15 @@ import PantryTable from "./PantryTable";
 export default class PantryParent extends Component {
   state = {
     pantry: [],
-    purchases: [
-      {
-        id: 1,
-        createdAt: moment()
-          .subtract(365, "days")
-          .format("MMM DD, YYYY"),
-        quantity: 3,
-        unitSize: "dozen",
-        weightMeasure: "ounces",
-        sizeQuantity: 24,
-        expiration: moment(this.createdAt)
-          .add(21, "days")
-          .format("MMM DD, YYYY"),
-        unitPrice: 1.49,
-        location: "Smiths",
-        pantryId: 1
-      }
-    ],
+    purchases: [],
     sort: "frequency",
     update: false,
     label: "",
     updateValue: ""
   };
-  componentDidMount() {
-    this.getPantry();
+  async componentDidMount() {
+    await this.getPantry();
+    await this.getPurchases();
   }
   getPantry = () => {
     const { id } = this.props.user.user;
@@ -56,6 +40,18 @@ export default class PantryParent extends Component {
       })
     );
   };
+
+  getPurchases = async () => {
+    let everything = [];
+    const allPurchases = this.state.pantry.map(async item => {
+      const purchases = await PurchasesAPI.getPurchases(item.id);
+      everything.push(purchases);
+    });
+    this.setState({
+      purchases: everything
+    });
+  };
+
   handleDelete = (e, id, cb) => {
     e.preventDefault();
 

@@ -1,12 +1,12 @@
 const db = require("../models");
 
-// Defining methods for the PurchasessController
+// Defining methods for the Purchases Controller
 module.exports = {
   findAll: function(req, res) {
     console.log(`\nInside findAll of purchases, here's req.body: `, req.body);
     db.Purchases.findAll({
-      where: { pantryId: req.body.id },
-      order: [["createdAt", "DESC"]]
+      where: req.body,
+      order: [["simDate", "DESC"]]
     })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
@@ -17,6 +17,10 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
   create: function(req, res) {
+    console.log(
+      `\n\nInside purchase controller create. Here's req.body: `,
+      req.body
+    );
     db.Purchases.create(req.body)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));

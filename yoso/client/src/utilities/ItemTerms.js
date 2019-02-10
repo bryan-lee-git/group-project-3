@@ -321,23 +321,16 @@ const preVegan2 = preVegan.filter(
 const nonVegan = preVegan2.filter(
   term => term.search(/frozen|first|shav/i) === -1
 );
-
 const bread = termKeys.filter(term => term.search(breadSearch) > -1);
-
 const cheese = termKeys.filter(term => term.search(/cheese(?!\sdress)/i) > -1);
-
 const prestable = termKeys.filter(term => term.search(stableSearch) > -1);
-
 const stable = prestable.filter(
   term => term.search(/canned|frozen|soup|baby|sour|petro/i) === -1
 );
-
 const canned = [...cans, ...soup];
 
 const condiments = termKeys.filter(term => term.search(condimentsSearch) > -1);
-
 const prespices = termKeys.filter(term => term.search(spicesSearch) > -1);
-
 const spices = prespices.filter(term => term.search(/canned/i) === -1);
 
 const groceries = [
@@ -351,9 +344,7 @@ const groceries = [
   ...spices,
   ...produce
 ];
-
 const house = termKeys.filter(term => !groceries.includes(term));
-
 const household = house.filter(term => term.search(/veg|fresh/i) === -1);
 
 export const categories = [

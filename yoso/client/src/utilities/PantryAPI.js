@@ -12,6 +12,7 @@ export default {
   getPantryItembyId: function(id) {
     return axios.get(`/api/pantry/${id}`);
   },
+
   getPantryItem: function(UserId, name) {
     const data = { UserId: UserId, name: name };
     console.log(
@@ -37,7 +38,8 @@ export default {
       `inside update pantry item, here's the incoming data: id: ${id} and data: `,
       data
     );
-    return axios.put({
+    return axios({
+      method: "put",
       url: `/api/pantry/${id}`,
       data: data
     });

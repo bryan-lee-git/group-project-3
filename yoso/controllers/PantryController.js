@@ -38,6 +38,18 @@ module.exports = {
   },
 
   /////////
+  // Called by pantry.js matching "/api/pantry/:id Method: GET"
+  /////////
+
+  findOneById: function(req, res) {
+    db.Pantry.findOne({
+      where: { id: req.params.id }
+    })
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
+
+  /////////
   // Called by pantry.js matching "/api/pantry/:id Method: POST"
   /////////
 
@@ -85,7 +97,7 @@ module.exports = {
       req.body
     );
 
-    db.Pantry.update(req.body, { where: { id: req.params } })
+    db.Pantry.update(req.body, { where: { id: req.params.id } })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
