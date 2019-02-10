@@ -37,10 +37,7 @@ export default {
     return axios({
       method: `put`,
       url: `/api/listitem/${id}`,
-      data: {
-        listId: listId,
-        data
-      }
+      data: data
     });
   },
   // Delete a specific item on a list.

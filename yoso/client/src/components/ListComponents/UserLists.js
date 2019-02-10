@@ -40,10 +40,22 @@ export default class UserLists extends Component {
             user={this.props.user}
             name={list.name}
             currentList={list.lists}
+            handleEditItem={this.handleEditItem}
             handleDeleteItem={this.handleDeleteItem}
           />
           <Row>
-            <Col s={5}>
+            <Col s={12} l={4}>
+              <Button
+                onClick={() => this.props.setShoppingList(list.id, 3)}
+                className="list-btn"
+              >SHOP</Button>
+            </Col>
+            <Col s={12} l={4}>
+              <Button
+                className="list-btn"
+              >SHARE</Button>
+            </Col>
+            <Col s={12} l={4}>
               <Button
                 className="list-btn"
                 onClick={e =>
@@ -55,12 +67,6 @@ export default class UserLists extends Component {
                   )
                 }
               >DELETE</Button>
-            </Col>
-            <Col s={5} offset="s2" className="right">
-              <Button
-                onClick={() => this.props.setShoppingList(list.id, 3)}
-                className="list-btn"
-              >SHOP</Button>
             </Col>
           </Row>
         </CollapsibleItem>
