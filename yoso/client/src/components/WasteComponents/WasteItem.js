@@ -1,18 +1,7 @@
 import React, { Component } from "react";
 import { Col, Card, Row, Button, Modal, Input } from "react-materialize";
-
-import Moment from "react-moment";
-
-import BuildPantry from "../../utilities/YOSOSimulator.js/BuildPantry";
-import { categories } from "../../utilities/ItemTerms";
 import PantryAPI from "../../utilities/PantryAPI";
-import random from "../../utilities/YOSOSimulator.js/Random";
 import WasteTable from "./WasteTable";
-import DailyUpdate from "../../utilities/YOSOSimulator.js/DailyUpdateSim";
-import moment from "moment";
-import GoShopping from "../../utilities/YOSOSimulator.js/GoShopping";
-
-//import "moment-timezone";
 
 class WasteItem extends Component {
   state = {
