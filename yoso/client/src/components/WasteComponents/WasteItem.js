@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { Col, Card, Row, Button, Modal, Input } from "react-materialize";
 import PantryAPI from "../../utilities/PantryAPI";
 import WasteTable from "./WasteTable";
+import Collapsible from "react-materialize/lib/Collapsible";
+import CollapsibleItem from "react-materialize/lib/CollapsibleItem";
+import PantryTable from "../PantryTable";
 
 class WasteItem extends Component {
   state = {
@@ -72,14 +75,20 @@ class WasteItem extends Component {
     });
   };
 
-  getPantry = () => {
+  getPantry = column => {
     const { id } = this.props.context.user;
-    const sort = this.state.sort;
+    let sort = "";
+    if (!column) {
+      sort = this.state.sort;
+    } else {
+      sort = column;
+    }
+
     console.log(
       `in get pantry inside wasteitem, here's sort: ${sort} and here's the UserId: ${id}`
     );
 
-    PantryAPI.getPantry(id, this.state.sort).then(response =>
+    PantryAPI.getPantry(id, sort).then(response =>
       this.setState({
         pantry: response.data
       })
@@ -123,14 +132,24 @@ class WasteItem extends Component {
             {user.first.toUpperCase()}'S PANTRY
           </h3>
           <Col s={12}>
-            <WasteTable
-              pantry={this.state.pantry}
-              purchases={this.state.purchases}
-              handleDelete={this.handleDelete}
-              handlePantryUpdate={this.handlePantryUpdate}
-              buildPantry={this.buildPantry}
-              getPantry={this.getPantry}
-            />
+            <Collapsible>
+              <CollapsibleItem header="New Table Style">
+                <PantryTable
+                  pantry={this.state.pantry}
+                  getPantry={this.getPantry}
+                />
+              </CollapsibleItem>
+              <CollapsibleItem header="Old Table Style">
+                <WasteTable
+                  pantry={this.state.pantry}
+                  purchases={this.state.purchases}
+                  handleDelete={this.handleDelete}
+                  handlePantryUpdate={this.handlePantryUpdate}
+                  buildPantry={this.buildPantry}
+                  getPantry={this.getPantry}
+                />
+              </CollapsibleItem>
+            </Collapsible>
           </Col>
         </Row>
 

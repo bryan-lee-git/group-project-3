@@ -92,7 +92,11 @@ export default class ListConduit extends Component {
           {view === 0 ? (
             <ListSwitch context={this.state} handleSwitch={this.handleSwitch} />
           ) : view === 1 ? (
-            <NewList context={this.state} handleSwitch={this.handleSwitch} />
+            <NewList
+              context={this.state}
+              handleSwitch={this.handleSwitch}
+              handleClearInputs={this.handleClearInputs}
+            />
           ) : view === 2 ? (
             <UserLists
               user={this.props.user}
