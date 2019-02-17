@@ -125,7 +125,7 @@ export default class AddPantryItem extends Component {
                   <option value="">Choose a Category</option>
                   <option value="nonVegan">Non Vegan</option>
                   <option value="bread">Bread</option>
-                  <option value="cheese">Cheese</option>
+                  <option value="cheese">Dairy</option>
                   <option value="stable">Shelf Stable Grocery</option>
                   <option value="condiments">Condiments</option>
                   <option value="produce">Fresh Produce</option>
