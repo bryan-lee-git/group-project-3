@@ -24,7 +24,7 @@ export default props => {
   ];
   const columns = [
     { Header: "Name", accessor: "name" },
-
+    { Header: "Description", accessor: "description" },
     {
       Header: "Current On-Hand",
       accessor: "stock"
@@ -67,9 +67,9 @@ export default props => {
               if (!column.expander) {
                 if (column.Header.type) {
                   props.handleDelete(e, rowInfo.original.id, props.getPantry);
-                } else {
+                } else if (rowInfo) {
                   console.log(
-                    `column name is ${column.id}, id is ${
+                    `column name is ${column.id}, name is ${
                       rowInfo.original.name
                     }`
                   );
@@ -79,7 +79,9 @@ export default props => {
                 handleOriginal();
               } else {
                 console.log(
-                  `column name is ${column.id}, id is ${rowInfo.original.name}`
+                  `column name is ${column.id}, name is ${
+                    rowInfo.original.name
+                  }`
                 );
                 props.handlePantryUpdate(e, column.id, rowInfo.original);
               }

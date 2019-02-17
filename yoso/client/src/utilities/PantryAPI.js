@@ -31,8 +31,8 @@ export default {
   },
   // Edit a specific Pantry item.
   updatePantryItem: function(id, data) {
-    return axios.put({
-
+    return axios({
+      method: "put",
       url: `/api/pantry/${id}`,
       data: data
     });

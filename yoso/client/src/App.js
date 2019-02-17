@@ -46,12 +46,16 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 
 class App extends Component {
   state = {
-    loggedIn: false
+    loggedIn: false,
+    updated: false
   };
 
   handleSignUp = (data, cb) => {
     const { first, last, email, password, street, city, state, zip } = data;
-    const ciphertext = CryptoJS.AES.encrypt(password, 'yosoAuthKeyMofo').toString();
+    const ciphertext = CryptoJS.AES.encrypt(
+      password,
+      "yosoAuthKeyMofo"
+    ).toString();
     axios
       .post("/login", {
         first,
@@ -94,24 +98,24 @@ class App extends Component {
       .then(response => {
         if (response.data) {
           const hash = response.data.password;
-          var bytes = CryptoJS.AES.decrypt(hash, 'yosoAuthKeyMofo');
+          var bytes = CryptoJS.AES.decrypt(hash, "yosoAuthKeyMofo");
           var originalText = bytes.toString(CryptoJS.enc.Utf8);
           if (originalText === password) {
-              yosoAuth.authenticate();
-              this.setState({
-                first: response.data.first,
-                last: response.data.last,
-                email: response.data.email,
-                password: hash,
-                street: response.data.street,
-                city: response.data.city,
-                state: response.data.state,
-                zip: response.data.zip,
-                id: response.data.id,
-                loggedIn: true
-              });
-              if (cb) cb();
-            } else console.log("Incorrect Log-In Attempt. Please Try Again.");
+            yosoAuth.authenticate();
+            this.setState({
+              first: response.data.first,
+              last: response.data.last,
+              email: response.data.email,
+              password: hash,
+              street: response.data.street,
+              city: response.data.city,
+              state: response.data.state,
+              zip: response.data.zip,
+              id: response.data.id,
+              loggedIn: true
+            });
+            if (cb) cb();
+          } else console.log("Incorrect Log-In Attempt. Please Try Again.");
         } else console.log("Could not sign in! Please try again.");
       })
       .catch(err => {
@@ -122,7 +126,10 @@ class App extends Component {
 
   handleAccountUpdate = (data, cb) => {
     const { first, last, email, password, street, city, state, zip } = data;
-    const ciphertext = CryptoJS.AES.encrypt(password, 'yosoAuthKeyMofo').toString();
+    const ciphertext = CryptoJS.AES.encrypt(
+      password,
+      "yosoAuthKeyMofo"
+    ).toString();
     axios
       .put(`/login/${email}`, {
         first,
@@ -163,6 +170,12 @@ class App extends Component {
     if (cb) cb();
   };
 
+  dailyUpdateStatus = () => {
+    this.setState({
+      updated: true
+    });
+  };
+
   render() {
     return (
       <Router>
@@ -171,7 +184,8 @@ class App extends Component {
           value={{
             user: this.state,
             accountUpdate: this.handleAccountUpdate,
-            logOut: this.handleLogOut
+            logOut: this.handleLogOut,
+            dailyUpdateStatus: this.dailyUpdateStatus
           }}
         >
           <header>

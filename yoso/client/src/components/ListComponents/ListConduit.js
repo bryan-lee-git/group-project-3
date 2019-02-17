@@ -10,7 +10,6 @@ import PantryAPI from "../../utilities/PantryAPI";
 import ItemAPI from "../../utilities/ItemAPI";
 
 export default class ListConduit extends Component {
-
   state = {
     lists: [],
     view: 0
@@ -22,25 +21,26 @@ export default class ListConduit extends Component {
 
   componentWillMount = () => {
     this.deleteYosoList();
-  }
+  };
 
   getPantry = () => {
     PantryAPI.getPantry(this.props.user.id, "frequency").then(response => {
       const YOSO = response.data.filter(item => item.stock !== "ENOUGH");
-      if (YOSO.length > 0) this.createList(this.props.user.id, YOSO);
-    })
-  }
+      if (YOSO.length > 0) {
+        this.createList(this.props.user.id, YOSO);
+      }
+    });
+  };
 
   deleteYosoList = () => {
     ListAPI.getYoso(this.props.user.id).then(res => {
       if (res.data[0]) {
         ListAPI.deleteList(this.props.user.id, res.data[0].id).then(() => {
           this.getPantry();
-        })
+        });
       } else this.getPantry();
-
-    })
-  }
+    });
+  };
 
   createList = (id, list) => {
     ListAPI.createList(id, {
@@ -74,8 +74,8 @@ export default class ListConduit extends Component {
     this.setState({
       shoppingList: id,
       view: view
-    })
-  }
+    });
+  };
 
   handleSwitch = (e, view) => {
     e.preventDefault();
@@ -90,15 +90,9 @@ export default class ListConduit extends Component {
       <Container>
         <Row>
           {view === 0 ? (
-            <ListSwitch
-              context={this.state}
-              handleSwitch={this.handleSwitch}
-            />
+            <ListSwitch context={this.state} handleSwitch={this.handleSwitch} />
           ) : view === 1 ? (
-            <NewList
-              context={this.state}
-              handleSwitch={this.handleSwitch}
-            />
+            <NewList context={this.state} handleSwitch={this.handleSwitch} />
           ) : view === 2 ? (
             <UserLists
               user={this.props.user}
@@ -108,7 +102,7 @@ export default class ListConduit extends Component {
               getLists={this.getLists}
             />
           ) : (
-            <ShoppingList 
+            <ShoppingList
               user={this.props.user}
               context={this.state}
               handleSwitch={this.handleSwitch}
@@ -116,7 +110,7 @@ export default class ListConduit extends Component {
             />
           )}
         </Row>
-        <BottomSpacer/>
+        <BottomSpacer />
       </Container>
     );
   }
