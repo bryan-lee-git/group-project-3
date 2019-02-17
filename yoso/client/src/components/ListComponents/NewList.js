@@ -14,11 +14,43 @@ import ItemAPI from "../../utilities/ItemAPI";
 import { terms } from "../../utilities/ItemTerms";
 import BackBtn from "../BackBtn";
 import PageHeader from "../PageHeader";
+import NewItemInput from "./NewItemInput";
+import DisplayAddList from "./DisplayAddList";
 
-const measurements = ["Pack", "Ounce(s)", "Pound(s)", "Feet", "Liter(s)", "Can(s)", "Bottle(s)", "Package(s)", "Carton(s)", "Loaf(s)", "Box(es)", "Bunch(es)", "Gallon(s)", "Quart(s)", "Pint(s)", "Case(s)", "Dozen", "Bag(s)", "Single(s)", "Jar(s)", "Piece(s)", "Container(s)", "Unit(s)"];
+const measurements = [
+  "Package Type",
+  "Pack",
+  "Ounce(s)",
+  "Pound(s)",
+  "Feet",
+  "Liter(s)",
+  "Can(s)",
+  "Bottle(s)",
+  "Package(s)",
+  "Carton(s)",
+  "Loaf(s)",
+  "Box(es)",
+  "Bunch(es)",
+  "Gallon(s)",
+  "Quart(s)",
+  "Pint(s)",
+  "Case(s)",
+  "Dozen",
+  "Bag(s)",
+  "Single(s)",
+  "Jar(s)",
+  "Piece(s)",
+  "Container(s)",
+  "Unit(s)"
+];
 
 export default class NewList extends Component {
-  state = { items: [], terms: terms, redirect: false };
+  state = {
+    items: [],
+    terms: terms,
+    redirect: false,
+    listNameDone: false
+  };
 
   handleChange = e => {
     const { name, value } = e.target;
@@ -39,17 +71,11 @@ export default class NewList extends Component {
     this.setState({ name: capName });
   };
 
-  handleNewItem = e => {
-    e.preventDefault();
-    const newItem = {
-      name: this.state.name,
-      unitSize: this.state.unitSize,
-      measurement: this.state.measurement,
-      quantity: this.state.quantity,
-      notes: this.state.notes
-    };
+  handleNewItem = newItem => {
     const newItems = [...this.state.items, newItem];
-    this.setState({ items: newItems });
+    this.setState({
+      items: newItems
+    });
   };
 
   handleRemoveItem = e => {
@@ -79,6 +105,13 @@ export default class NewList extends Component {
     });
   };
 
+  getListName = e => {
+    e.preventDefault();
+    this.setState({
+      listNameDone: !this.state.listNameDone
+    });
+  };
+
   render() {
     return (
       <div className="center-align">
@@ -89,119 +122,34 @@ export default class NewList extends Component {
             </PageHeader>
           </Col>
         </Row>
-        <BackBtn goto="/lists" handleSwitch={this.props.handleSwitch} page={0}/>
+        <BackBtn
+          goto="/lists"
+          handleSwitch={this.props.handleSwitch}
+          page={0}
+        />
         <Row>
-          <Col s={12} l={2}>
-            <Card className="z-depth-5 animate-up list-card rounded">
-              <Row>
-                <Input
-                  s={12}
-                  placeholder="List Name"
-                  name="listName"
-                  onChange={this.handleChange}
-                />
-              </Row>
-            </Card>
-          </Col>
-          <Col s={12} l={10}>
-            <Card
-              id="new-item-input"
-              className="z-depth-5 animate-up-2 list-card rounded"
-            >
-              <Row>
-                <Autocomplete
-                  s={12}
-                  l={2}
-                  data={this.state.terms}
-                  placeholder="Name"
-                  onAutocomplete={this.handleAutocomplete}
-                  name="name"
-                  onChange={this.handleChange}
-                />
-                <Input
-                  s={6}
-                  l={2}
-                  placeholder="Unit Size"
-                  name="unitSize"
-                  onChange={this.handleChange}
-                />
-                <Input
-                  s={6}
-                  l={2}
-                  type="select"
-                  defaultValue="pack"
-                  name="measurement"
-                  onChange={this.handleChange}
-                >
-                  { measurements.map((measurement, index) => (<option key={index} value={measurement}>{measurement}</option>)) }               
-                </Input>
-                <Input
-                  s={6}
-                  l={2}
-                  placeholder="Quantity"
-                  name="quantity"
-                  onChange={this.handleChange}
-                />
-                <Input
-                  s={6}
-                  l={2}
-                  placeholder="Notes"
-                  name="notes"
-                  onChange={this.handleChange}
-                />
-                <Col s={12} l={2}>
-                  <Button
-                    className="btn btn-large add-item-btn"
-                    onClick={this.handleNewItem}
-                  >
-                    Add
-                  </Button>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-          <Col s={12}>
-            <Card className="animate-up-3 z-depth-5 rounded">
-              <Row>
-                <h2>{this.state.items.name}</h2>
-                {this.state.items.length > 0 ? (
-                  <Table className="striped highlight centered responsive-table">
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Unit Size</th>
-                        <th>Measurement</th>
-                        <th>Quantity</th>
-                        <th>Notes</th>
-                        <th>Remove</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {this.state.items.map((item, index) => (
-                        <tr key={index}>
-                          <td>{item.name}</td>
-                          <td>{item.unitSize}</td>
-                          <td>{item.measurement}</td>
-                          <td>{item.quantity}</td>
-                          <td>{item.notes}</td>
-                          <td onClick={event => this.handleRemoveItem(event)}>
-                            <Icon data-index={index}>delete_forever</Icon>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                ) : (
-                  <div>No Items Added to Your List Yet</div>
-                )}
-              </Row>
-            </Card>
-          </Col>
-          <Col s={12}>
-            <Button id="save-list" className="btn btn-large animate-up-4" onClick={e => this.createList(e, this.props.context.id)}>
-              Save List
-            </Button>
-          </Col>
+          <NewItemInput
+            handleAutocomplete={this.handleAutocomplete}
+            handleChange={this.handleChange}
+            handleNewItem={this.handleNewItem}
+            handleClearInputs={this.handleClearInputs}
+            state={this.state}
+            measurements={measurements}
+            terms={this.state.terms}
+          />
+          {this.state.listNameDone ? (
+            <DisplayAddList
+              state={this.state}
+              userId={this.props.context.id}
+              createList={this.createList}
+            />
+          ) : (
+            <Col s={12}>
+              <Button className="back-btn" onClick={this.getListName}>
+                SAVE LIST NAME
+              </Button>
+            </Col>
+          )}
         </Row>
       </div>
     );

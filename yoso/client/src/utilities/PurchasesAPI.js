@@ -12,7 +12,6 @@ export default {
   // Create a new purchase.
   createPurchase: function(data) {
     return axios.post(`/api/purchases`, data);
-
   },
   // Edit a specific purchase.
   updatePurchase: function(id) {
