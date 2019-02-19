@@ -67,8 +67,8 @@ export default class AddPantryItem extends Component {
 
   render() {
     return (
-      <Container>
         <Row>
+          <Col s={12} className="animate-up">
           {this.props.open ? (
             <Modal
               id="add-pantry-modal"
@@ -76,15 +76,13 @@ export default class AddPantryItem extends Component {
               open={this.props.open}
               title="ADD ITEM"
               actions={
-                <Col s={12}>
                   <Button
-                    className="back-btn"
+                    className="back-btn add-pantry-btn"
                     open={this.props.open}
                     onClick={this.props.doneAdding}
                   >
                     Close
                   </Button>
-                </Col>
               }
             >
               <Autocomplete
@@ -174,7 +172,7 @@ export default class AddPantryItem extends Component {
                   onChange={this.handleChange}
                 />
               </Row>
-              <Button onClick={this.handleClick}>Submit</Button>
+              <Button className="pantry-submit" onClick={this.handleClick}>Submit</Button>
             </Modal>
           ) : (
             <Button
@@ -184,8 +182,8 @@ export default class AddPantryItem extends Component {
               ADD PANTRY ITEM
             </Button>
           )}
+          </Col>
         </Row>
-      </Container>
     );
   }
 }
