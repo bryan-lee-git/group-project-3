@@ -72,7 +72,7 @@ export default class PantryParent extends Component {
           open={this.state.open}
         />
         {this.state.pantry.length > 0 ? (
-          <Collapsible>
+          <Collapsible className="animate-up-2">
             <CollapsibleItem header={`${this.props.user.user.first}'S PANTRY`}>
               <PantryTable
                 pantry={this.state.pantry}
