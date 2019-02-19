@@ -9,6 +9,7 @@ export default props => {
         s={6}
         l={2}
         placeholder="Unit Size"
+        type="number"
         name="unitSize"
         label="Unit Size"
         value={props.state.unitSize}
@@ -32,8 +33,9 @@ export default props => {
       </Input>
       <Input
         s={6}
-        l={1}
+        l={2}
         placeholder="Quantity"
+        type="number"
         label="# of Packages"
         name="quantity"
         value={props.state.quantity}

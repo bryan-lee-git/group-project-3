@@ -7,7 +7,6 @@ export default props => {
       <Autocomplete
         s={12}
         l={5}
-        title="Name"
         data={props.terms}
         label="Existing Items"
         placeholder="SELECT AN EXISTING ITEM"
