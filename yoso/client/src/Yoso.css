@@ -21,7 +21,7 @@ body {
   font-size: 20px;
 }
 
-.back-btn, #save-list, .add-item-btn, .done-btn, .btn.modal-close, .end-shop-btn, .build-pantry-btn, .search-btn {
+.back-btn, #save-list, .add-item-btn, .done-btn, .btn.modal-close, .end-shop-btn, .build-pantry-btn, .search-btn, .add-pantry-btn, .pantry-submit {
   width: 100%;
 }
 

@@ -66,8 +66,8 @@ export default class AddPantryItem extends Component {
 
   render() {
     return (
-      <Container>
         <Row>
+          <Col s={12} className="animate-up">
           {this.props.open ? (
             <NewItemModal
               doneAdding={this.props.doneAdding}
@@ -86,8 +86,8 @@ export default class AddPantryItem extends Component {
               ADD PANTRY ITEM
             </Button>
           )}
+          </Col>
         </Row>
-      </Container>
     );
   }
 }
