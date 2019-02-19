@@ -13,6 +13,7 @@ export default props => {
           type={type}
           value={value}
           disabled="disabled"
+          style={{ width: "auto" }}
         >
           {name}
         </Input>
@@ -23,6 +24,7 @@ export default props => {
           type={type}
           name={name}
           value={value}
+          style={{}}
           onChange={props.handleChange}
         >
           {props.activeCell === props.thisCell

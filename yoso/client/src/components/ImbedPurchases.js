@@ -16,7 +16,7 @@ export default class ImbedPurchases extends Component {
           padding: 20,
           zIndex: "10",
           borderRadius: "10px",
-          borderSpacing: 5,
+
           border: "2px solid #00bf0d"
         }
       : { display: "none", position: "absolute" };

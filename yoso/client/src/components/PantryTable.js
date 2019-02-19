@@ -26,7 +26,7 @@ export default class PantryTable extends Component {
   };
 
   getStyle = id => {
-    return this.state.selected === id ? { border: "1px solid #00bf0d" } : {};
+    return this.state.selected === id ? { border: "1px solid #00bf0d" } : null;
   };
 
   handleEdit = (e, cell) => {

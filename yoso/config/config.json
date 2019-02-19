@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "port": 8889,
+    "port": 3306,
     "password": "root",
     "database": "yoso",
     "host": "127.0.0.1",
