@@ -33,10 +33,7 @@ export default props => {
         </Input>
       )}
       {props.activeCell === props.thisCell ? (
-        <Button
-          style={{ display: "inline" }}
-          onClick={e => props.handleEdit(e, props.thisCell)}
-        >
+        <Button floating onClick={e => props.handleEdit(e, props.thisCell)}>
           <Icon>save</Icon>
         </Button>
       ) : (

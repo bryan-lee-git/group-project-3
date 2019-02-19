@@ -5,35 +5,28 @@ import PantryAPI from "../utilities/PantryAPI";
 import EditInput from "./ListComponents/EditInput";
 export default class PantryTable extends Component {
   state = {
-    helper: "",
     selected: "",
     PantryId: ""
   };
 
   handleHover = e => {
     e.preventDefault(e);
-    if (e.target.dataset.id) {
-      this.setState({
-        helper: `${e.target.dataset.field} is a ${
-          e.nativeEvent.target.nodeName
-        }, has value of ${
-          e.target.dataset.value
-        }, the PantryId is ${e.target.dataset.id.slice(
-          e.target.dataset.id.search("-") + 1
-        )}, the cell id is ${e.target.dataset.id}, and is located at ${
-          e.clientX
-        } X and ${e.clientY} Y`,
-        selected: e.target.dataset.id,
-        PantryId: e.target.dataset.id.slice(
-          e.target.dataset.id.search("-") + 1
-        ),
-        field: e.target.dataset.field
-      });
+    if (e.target.dataset.id !== null) {
+      const { id, field } = e.target.dataset;
+      if (id && field) {
+        this.setState(() => {
+          return {
+            selected: id,
+            PantryId: id.slice(id.search("-") + 1),
+            field: field
+          };
+        });
+      }
     }
   };
 
   getStyle = id => {
-    return this.state.selected === id ? { backgroundColor: "yellow" } : {};
+    return this.state.selected === id ? { border: "1px solid #00bf0d" } : {};
   };
 
   handleEdit = (e, cell) => {
@@ -66,6 +59,7 @@ export default class PantryTable extends Component {
   handleChange = e => {
     e.preventDefault();
     const { name, value } = e.target;
+    console.log(`value is ${value}`);
     this.setState({ [name]: value });
   };
 
@@ -89,7 +83,6 @@ export default class PantryTable extends Component {
           data-id={`name-${item.id}`}
           data-value={item.name}
           onMouseEnter={this.handleHover}
-          onClick={this.handleEdit}
           style={this.getStyle(`name-${item.id}`)}
         >
           <strong>{item.name}</strong>
@@ -227,10 +220,13 @@ export default class PantryTable extends Component {
     return (
       <React.Fragment>
         <Table
-          centered={true}
-          responsive={true}
-          bordered={true}
-          style={{ backgroundColor: "white" }}
+          centered
+          responsive
+          bordered
+          style={{
+            backgroundColor: "white",
+            borderRadius: 10
+          }}
         >
           <thead>
             <tr id="header">
