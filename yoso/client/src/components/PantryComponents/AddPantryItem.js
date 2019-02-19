@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Button, Container } from "react-materialize";
+import { Row, Button, Col } from "react-materialize";
 import { terms } from "../../utilities/ItemTerms";
 import NewItemModal from "./NewItemModal";
 export default class AddPantryItem extends Component {
@@ -66,8 +66,8 @@ export default class AddPantryItem extends Component {
 
   render() {
     return (
-        <Row>
-          <Col s={12} className="animate-up">
+      <Row>
+        <Col s={12} className="animate-up">
           {this.props.open ? (
             <NewItemModal
               doneAdding={this.props.doneAdding}
@@ -86,8 +86,8 @@ export default class AddPantryItem extends Component {
               ADD PANTRY ITEM
             </Button>
           )}
-          </Col>
-        </Row>
+        </Col>
+      </Row>
     );
   }
 }

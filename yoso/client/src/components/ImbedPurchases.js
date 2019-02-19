@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Icon, Table, Button, Collapsible, Row } from "react-materialize";
+import { Icon, Table, Row } from "react-materialize";
 import PurchasesAPI from "../utilities/PurchasesAPI";
 import moment from "moment";
 
@@ -12,7 +12,12 @@ export default class ImbedPurchases extends Component {
           bottom: "100%",
           left: "100%",
           display: "block",
-          backgroundColor: "white"
+          backgroundColor: "white",
+          padding: 20,
+          zIndex: "10",
+          borderRadius: "10px",
+
+          border: "2px solid #00bf0d"
         }
       : { display: "none", position: "absolute" };
   };
@@ -35,9 +40,15 @@ export default class ImbedPurchases extends Component {
   render() {
     return (
       <React.Fragment>
-        <div onClick={this.handleClick}>
-          <Icon>list_alt</Icon>
-        </div>
+        {!this.state.open ? (
+          <div onClick={this.handleClick}>
+            <Icon>list_alt</Icon>
+          </div>
+        ) : (
+          <div onClick={this.handleClick}>
+            <Icon>clear</Icon>
+          </div>
+        )}
 
         <Row>
           <div style={{ position: "relative" }}>
@@ -49,8 +60,8 @@ export default class ImbedPurchases extends Component {
                 bordered={true}
                 striped
               >
+                <caption>{this.props.itemName}</caption>
                 <thead>
-                  <caption>{this.props.itemName}</caption>
                   <tr>
                     <th>Date</th>
                     <th>Expiration Date</th>
@@ -63,9 +74,9 @@ export default class ImbedPurchases extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.purchases.map((item, index) => (
-                    <tr key={index}>
-                      <td>{moment(item.createdAt).format("MM-DD-YYYY")}</td>
+                  {this.state.purchases.map(item => (
+                    <tr>
+                      <td>{moment(item.createdAt).format("MM/DD/YYYY")}</td>
                       <td>{item.expiration}</td>
                       <td>{item.measurement}</td>
                       <td>{item.quantity}</td>
