@@ -25,29 +25,29 @@ export default class NewItemInput extends Component {
   handleChange = e => {
     const termKeys = Object.keys(this.props.terms);
     const { name, value } = e.target;
-    if (value) {
-      const capName = value.replace(
-        value.charAt(0),
-        value.charAt(0).toUpperCase()
-      );
-      if (name === "name") {
-        if (termKeys.includes(value)) {
-          this.setState({
-            [name]: capName,
-            match: true
-          });
-        }
+
+    if (name === "name") {
+      const termMatch = termKeys.filter(item => {
+        const test2 = item.toLowerCase();
+        return item.toLowerCase().startsWith(value.toLowerCase()) ? item : null;
+      });
+
+      if (termMatch.length === 1) {
+        console.log(`termMatch = `, termMatch);
+        this.setState({
+          name: termMatch[0],
+          match: true
+        });
+      } else {
+        this.setState({ [name]: value, match: false });
       }
-      this.setState({ [name]: capName });
+    } else {
+      this.setState({ [name]: value, match: false });
     }
   };
 
   handleAutocomplete = value => {
-    const capName = value.replace(
-      value.charAt(0),
-      value.charAt(0).toUpperCase()
-    );
-    this.setState({ name: capName });
+    this.setState({ name: value, match: true });
   };
 
   handleNewItem = e => {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Icon, Modal, Input, Button } from "react-materialize";
+import { Table, Icon } from "react-materialize";
 import ImbedPurchases from "./ImbedPurchases";
 import PantryAPI from "../utilities/PantryAPI";
 import EditInput from "./ListComponents/EditInput";
@@ -63,23 +63,10 @@ export default class PantryTable extends Component {
     });
   };
 
-  handleSort = e => {
-    e.preventDefault();
-    console.log(`The column to sort is: ${e.target.dataset.field}`);
-    this.props.getPantry(e.target.dataset.field);
-  };
-
   handleChange = e => {
     e.preventDefault();
     const { name, value } = e.target;
-    if (value) {
-      const capName = value.replace(
-        value.charAt(0),
-        value.charAt(0).toUpperCase()
-      );
-
-      this.setState({ [name]: capName });
-    }
+    this.setState({ [name]: value });
   };
 
   render() {
@@ -259,7 +246,7 @@ export default class PantryTable extends Component {
                 data-field="name"
                 data-id={`header-name`}
                 onMouseEnter={this.handleHover}
-                onClick={this.handleSort}
+                onClick={this.props.handleSort}
                 style={this.getStyle(`header-name`)}
               >
                 Name
@@ -268,7 +255,7 @@ export default class PantryTable extends Component {
                 data-field="description"
                 data-id={`header-description`}
                 onMouseEnter={this.handleHover}
-                onClick={this.handleSort}
+                onClick={this.props.handleSort}
                 style={this.getStyle(`header-description`)}
               >
                 Description
@@ -277,7 +264,7 @@ export default class PantryTable extends Component {
                 data-field="stock"
                 onMouseEnter={this.handleHover}
                 data-id={`header-stock`}
-                onClick={this.handleSort}
+                onClick={this.props.handleSort}
                 style={this.getStyle(`header-stock`)}
               >
                 Stock
@@ -286,7 +273,7 @@ export default class PantryTable extends Component {
                 data-field="frequency"
                 data-id={`header-frequency`}
                 onMouseEnter={this.handleHover}
-                onClick={this.handleSort}
+                onClick={this.props.handleSort}
                 style={this.getStyle(`header-frequency`)}
               >
                 Frequency
@@ -295,7 +282,7 @@ export default class PantryTable extends Component {
                 data-field="shelfLife"
                 data-id={`header-shelfLife`}
                 onMouseEnter={this.handleHover}
-                onClick={this.handleSort}
+                onClick={this.props.handleSort}
                 style={this.getStyle(`header-shelfLife`)}
               >
                 Shelf Life
@@ -304,7 +291,7 @@ export default class PantryTable extends Component {
                 data-field="category"
                 data-id={`header-category`}
                 onMouseEnter={this.handleHover}
-                onClick={this.handleSort}
+                onClick={this.props.handleSort}
                 style={this.getStyle(`header-category`)}
               >
                 Category

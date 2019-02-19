@@ -55,20 +55,15 @@ export default class NewList extends Component {
   handleChange = e => {
     const { name, value } = e.target;
     if (value) {
-      const capName = value.replace(
-        value.charAt(0),
-        value.charAt(0).toUpperCase()
-      );
-      this.setState({ [name]: capName });
+      this.setState({ [name]: value });
     }
   };
 
-  handleAutocomplete = value => {
-    const capName = value.replace(
-      value.charAt(0),
-      value.charAt(0).toUpperCase()
-    );
-    this.setState({ name: capName });
+  handleAutocomplete = e => {
+    const { name, value } = e.target;
+    if (value) {
+      this.setState({ [name]: value, match: true });
+    }
   };
 
   handleNewItem = newItem => {
@@ -87,6 +82,7 @@ export default class NewList extends Component {
 
   createList = (e, id) => {
     e.preventDefault();
+
     ListAPI.createList(id, {
       name: this.state.listName
     }).then(response => {
