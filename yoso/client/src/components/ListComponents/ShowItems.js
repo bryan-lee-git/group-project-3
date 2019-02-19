@@ -1,18 +1,40 @@
 import React, { Component } from "react";
 import { Card, Row, Col, Table, Icon, Input, Modal } from "react-materialize";
 import ItemAPI from "../../utilities/ItemAPI";
-const measurements = ["Pack", "Ounce(s)", "Pound(s)", "Feet", "Liter(s)", "Can(s)", "Bottle(s)", "Package(s)", "Carton(s)", "Loaf(s)", "Box(es)", "Bunch(es)", "Gallon(s)", "Quart(s)", "Pint(s)", "Case(s)", "Dozen", "Bag(s)", "Single(s)", "Jar(s)", "Piece(s)", "Container(s)", "Unit(s)"];
-
+const measurements = [
+  "Pack",
+  "Ounce(s)",
+  "Pound(s)",
+  "Feet",
+  "Liter(s)",
+  "Can(s)",
+  "Bottle(s)",
+  "Package(s)",
+  "Carton(s)",
+  "Loaf(s)",
+  "Box(es)",
+  "Bunch(es)",
+  "Gallon(s)",
+  "Quart(s)",
+  "Pint(s)",
+  "Case(s)",
+  "Dozen",
+  "Bag(s)",
+  "Single(s)",
+  "Jar(s)",
+  "Piece(s)",
+  "Container(s)",
+  "Unit(s)"
+];
 
 class ShowItems extends Component {
-
   state = {};
 
   getItems = () => {
     ItemAPI.getItems(this.props.listId).then(res => {
       this.setState({ items: res.data });
     });
-  }
+  };
 
   handleUpdateItem = (e, itemId) => {
     e.preventDefault();
@@ -21,7 +43,7 @@ class ShowItems extends Component {
       if (item.id === itemId) {
         ItemAPI.updateItem(this.props.listId, item.id, item);
         item.saved = true;
-        this.setState({items: itemsList})
+        this.setState({ items: itemsList });
       }
     });
   };
@@ -35,12 +57,12 @@ class ShowItems extends Component {
     const itemsList = this.state.items;
     itemsList.forEach(item => {
       if (item.id === itemId) {
-        item.name = capName;
+        item.name = value;
         item.changed = true;
-        item.saved = false
-        this.setState({items: itemsList});
+        item.saved = false;
+        this.setState({ items: itemsList });
       }
-    })
+    });
   };
 
   handleUnitSizeChange = (e, itemId) => {
@@ -50,10 +72,10 @@ class ShowItems extends Component {
       if (item.id === itemId) {
         item.unitSize = value;
         item.changed = true;
-        item.saved = false
-        this.setState({items: itemsList});
+        item.saved = false;
+        this.setState({ items: itemsList });
       }
-    })
+    });
   };
 
   handleMeasurementChange = (e, itemId) => {
@@ -64,9 +86,9 @@ class ShowItems extends Component {
         item.measurement = value;
         item.changed = true;
         item.saved = false;
-        this.setState({items: itemsList});
+        this.setState({ items: itemsList });
       }
-    })
+    });
   };
 
   handleQuantityChange = (e, itemId) => {
@@ -77,9 +99,9 @@ class ShowItems extends Component {
         item.quantity = value;
         item.changed = true;
         item.saved = false;
-        this.setState({items: itemsList});
+        this.setState({ items: itemsList });
       }
-    })
+    });
   };
 
   handleNotesChange = (e, itemId) => {
@@ -90,14 +112,14 @@ class ShowItems extends Component {
         item.notes = value;
         item.changed = true;
         item.saved = false;
-        this.setState({items: itemsList});
+        this.setState({ items: itemsList });
       }
-    })
+    });
   };
 
   componentDidMount = () => {
     this.getItems();
-  }
+  };
 
   render() {
     return (
@@ -126,13 +148,17 @@ class ShowItems extends Component {
                           <td>
                             <Input
                               defaultValue={item.name}
-                              onChange={e => {this.handleNameChange(e, item.id)}}
+                              onChange={e => {
+                                this.handleNameChange(e, item.id);
+                              }}
                             />
                           </td>
                           <td>
                             <Input
                               defaultValue={item.unitSize}
-                              onChange={e => {this.handleUnitSizeChange(e, item.id)}}
+                              onChange={e => {
+                                this.handleUnitSizeChange(e, item.id);
+                              }}
                             />
                           </td>
                           <td>
@@ -140,34 +166,71 @@ class ShowItems extends Component {
                               type="select"
                               defaultValue={item.measurement}
                               name="measurement"
-                              onChange={e => {this.handleMeasurementChange(e, item.id)}}
+                              onChange={e => {
+                                this.handleMeasurementChange(e, item.id);
+                              }}
                             >
-                              { measurements.map((measurement, index) => (<option key={index} value={measurement}>{measurement}</option>)) }               
+                              {measurements.map((measurement, index) => (
+                                <option key={index} value={measurement}>
+                                  {measurement}
+                                </option>
+                              ))}
                             </Input>
                           </td>
                           <td>
                             <Input
                               defaultValue={item.quantity}
-                              onChange={e => {this.handleQuantityChange(e, item.id)}}
+                              onChange={e => {
+                                this.handleQuantityChange(e, item.id);
+                              }}
                             />
                           </td>
                           <td>
                             <Modal
                               className="center-align"
                               header={item.name + " Notes"}
-                              trigger={<span><Icon>assignment</Icon></span>}>
+                              trigger={
+                                <span>
+                                  <Icon>assignment</Icon>
+                                </span>
+                              }
+                            >
                               <p>
                                 <Input
-                                  defaultValue = {item.notes}
-                                  onChange={e => {this.handleNotesChange(e, item.id)}}
+                                  defaultValue={item.notes}
+                                  onChange={e => {
+                                    this.handleNotesChange(e, item.id);
+                                  }}
                                 />
                               </p>
                             </Modal>
                           </td>
-                          <td onClick={e => {this.handleUpdateItem(e, item.id)}}>
-                            <Icon className={this.state.items[index].changed === true && !this.state.items[index].saved ? "red-text" : "green-text"} >save</Icon>
+                          <td
+                            onClick={e => {
+                              this.handleUpdateItem(e, item.id);
+                            }}
+                          >
+                            <Icon
+                              className={
+                                this.state.items[index].changed === true &&
+                                !this.state.items[index].saved
+                                  ? "red-text"
+                                  : "green-text"
+                              }
+                            >
+                              save
+                            </Icon>
                           </td>
-                          <td onClick={e => {this.props.handleDeleteItem(e, this.props.listId, item.id, this.getItems)}}>
+                          <td
+                            onClick={e => {
+                              this.props.handleDeleteItem(
+                                e,
+                                this.props.listId,
+                                item.id,
+                                this.getItems
+                              );
+                            }}
+                          >
                             <Icon data-index={index}>delete_forever</Icon>
                           </td>
                         </tr>
